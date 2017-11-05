@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="/step2/" method="POST">
+	<table>
+		<tr>
+			<td>Linha:</td>
+			<td><select name="route_id">
+				{% for route in routes %}
+				<option value="{{route[1]}}"> {{route[0]}} </option>
+				{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>Periodo:</td>
+			<td><select name="period">
+				<option value="2">Segunda a sexta</option>
+				<option value="1">Fim de semana</option>
+			</select></td>
+		</tr>
+	</table>
+	<br>
+	<center><input type="submit" value="Submit"></center>
+</form>
+{% endblock %}
+

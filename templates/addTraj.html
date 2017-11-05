@@ -1,0 +1,53 @@
+{% extends "adminLayout.html" %}
+{% block content %}
+
+<h2>Adicionar trajeto</h2>
+<form action="/admin/addTraj" method="POST"> 
+	<table>
+		<tr>
+			<td>Nome:</td><td><input type="text" name="name"></td>
+		</tr>
+		<tr>
+			<td>Filename:</td><td><input type="text" name="filename"></td>
+		</tr>
+	</table>
+	<div id="container">
+		<div id="latlon">
+			Latitude:<input name="lat[]" type="number" pattern="[0-9]+([\.,][0-9]+)?"  step="0.0000000001"/>
+			Longitude:<input name="lon[]" type="number" pattern="[0-9]+([\.,][0-9]+)?"  step="0.0000000001"/>
+		</div>
+	</div>
+	<br>
+	<input type="button" value="Adicionar mais um par latitude/longitude" onClick="addInput('latlon');"/>
+	<br>
+	Paradas pertencentes a trajetoria:
+	{%for stop in stops%}
+	<br>
+	<input type="checkbox" name="selected_stops[]" value="{{stop[0]}}">{{stop[1]}}
+	{%endfor%}
+	<br>
+	<input type="submit" value="Submit"/>
+</form>
+
+<script>
+    var counter = 1;
+    var limit = 100;
+
+    function addInput(divName){
+         if (counter == limit){
+              alert("Voce chegou ao limite de adicionar " + counter + " coordenadas");
+         }
+
+         else {
+              var div = document.getElementById(divName);
+              var form = document.getElementById("container");
+              var newdiv = document.createElement("div");
+			  clone = div.cloneNode(true);
+              clone.id = counter;
+              form.appendChild(clone);
+              counter++;
+         }
+
+    }
+</script>
+{% endblock %}

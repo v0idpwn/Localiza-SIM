@@ -1,0 +1,56 @@
+{% extends "adminLayout.html" %}
+{% block content %}
+
+<h2>Adicionar horario</h2>
+<form action="/admin/addSch" method="POST"> 
+	<table>
+	<tr>
+		<td>Rota:</td>
+		<td><select name="route">
+		{%for route in routes%}
+			<option value="{{route[0]}}">{{route[1]}}</option>
+		{%endfor%}
+		</select></td>
+	</tr>
+	<tr>
+		<td>Inicio:</td><td><input type="text" name="begin"></td>
+	</tr>
+	<tr>
+		<td>Fim:</td><td><input type="text" name="end"></td> 
+	</tr>
+	<tr>
+		<td>Periodo:</td>
+		<td>
+			<select name="period">
+				<option value=1>Dias de semana</option>
+				<option value=2>Sabado e domingo</option>
+				<option value=3>Todos</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Trajetoria:</td>
+		<td>
+			<select name="traj_id">
+				{%for traj in trajs%}
+				<option value="{{traj[0]}}">{{traj[1]}}</option>
+				{%endfor%}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Onibus:</td>
+		<td>
+			<select name="bus_id">
+				{%for bus in buses%}
+				<option value="{{bus[0]}}">{{bus[1]}}</option>
+				{%endfor%}
+			</select>
+		</td>
+	</tr>
+	<tr><td>Horario de saida:</td><td><input type="text" name="time"></td></tr>
+	<tr><td>Descricao:</td><td><input type="text" name="desc"></td></tr>
+	</table>
+	<br><input type="submit" value="Submit"/>
+	</form>
+{% endblock %}

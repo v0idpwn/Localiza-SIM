@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset='utf-8' />
+      <title>Localiza SIM</title>
+      <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+      <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet'/>
+      <link href='../../static/stylesheet.css' rel='stylesheet'/>
+  </head>
+
+  <body>
+	<header>
+		<ul>
+			<li><a href="/">&larr; Voltar</a></li>
+		</ul>
+	</header>
+    <div id='map' class='map'> </div>
+	<script>
+	// url da localizacao do onibus
+	var url = '{{busUrl}}';
+	// Funcao necessaria p/ a funcao remove posteriormente
+	if (!('remove' in Element.prototype)) {
+		Element.prototype.remove = function() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+			}
+		};
+	}
+
+	// token de acesso ao mapbox
+	mapboxgl.accessToken = 'pk.eyJ1IjoidjBpZHB3biIsImEiOiJjajk4bmxod2UwazlxMzJvN21ycDdydG14In0.VuD4aqN2CSb0V7Qi13fs9w';
+
+	// criacao do mapa
+	var map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/light-v9',
+		center: [-53.7181477,-29.7048747],
+		zoom: 13
+	});
+
+	// a variavel routeData recebe os dados do arquivo geoJSON onde estao os dados da rota especifica
+	var a = "{{geoJsonString}}"
+	a = a.replace(/(\r\n|\n|\r)/gm,"").replace(/&#34;/g, '"');
+	var routeData = JSON.parse(a)
+
+	// adiciona os dados ao mapa
+	map.on('load', function (e) {
+		map.addSource("places", {
+			"type": "geojson",
+			"data": routeData
+	});
+		
+	// seta o intervalo de atualizacao da localizacao do onibus
+	window.setInterval(function() {
+        map.getSource('onibus').setData(url);
+    }, 2000);	
+		
+		
+	// dados do onibus	
+	map.addSource('onibus', { type: 'geojson', data: url });
+    map.addLayer({
+        "id": "onibus",
+        "type": "symbol",
+        "source": "onibus",
+        "layout": {
+            "icon-image": "bus-15"
+        }
+    });
+    
+    	
+	// adiciona os marcadores nos pontos chave
+	routeData.features.forEach(function(marker, i) {
+		if(marker.geometry.type == "Point"){
+			var el = document.createElement('div');
+			el.id = "marker-" + i;
+			el.className = marker.properties.type;
+			new mapboxgl.Marker(el)
+				.setLngLat(marker.geometry.coordinates)
+				.addTo(map);
+			el.addEventListener('click', function(e){
+				flyToStop(marker);
+				createPopUp(marker);
+				var activeItem = document.getElementsByClassName('active');
+
+				e.stopPropagation();
+				if (activeItem[0]) {
+					activeItem[0].classList.remove('active');
+				}
+			});
+		}
+	});
+	
+	// adicionando a rota
+	map.addLayer({
+		"id": "route",
+        "type": "line",
+        "source": "places",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#888",
+            "line-width": 6,
+            "line-opacity": 0.5
+        },
+        "filter": ["==", "$type", "LineString"],
+});
+
+	// adicionando o busa
+});
+
+
+	// funcao que voa para uma parada quando ela eh clicada
+	function flyToStop(currentFeature) {
+		map.flyTo({
+			center: currentFeature.geometry.coordinates,
+			zoom: 15
+		});
+	}
+
+	// funcao que mostra um popup quando uma parada eh clicada
+	function createPopUp(currentFeature) {
+		var popUps = document.getElementsByClassName('mapboxgl-popup');
+		if (popUps[0]) popUps[0].remove();
+
+		var popup = new mapboxgl.Popup({closeOnClick: false})
+			.setLngLat(currentFeature.geometry.coordinates)
+			.setHTML('<h3>' + currentFeature.properties.name + '</h3>' +
+					 '<h4>' + currentFeature.properties.type + '</h4>')
+			.addTo(map);
+	}
+	
+	</script>
+	</body>
+</html>

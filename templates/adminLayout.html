@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Localiza SIM - Pagina do Administrador </title>
+    <meta charset="utf-8">
+    <meta name="author" 		content="Felipe P. Stival">
+    <meta name="description" 	content="Localiza SIM, o sistema integrado que funciona">
+    <meta name="keywords" 		content="SIM, Onibus, Santa Maria">
+    <meta name="viewport" 		content="width=device-width, inicial-scale=1.0">
+    <link href="/static/admin.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+    <header>
+		<img src="/static/logo_01.png" id="logo"/>
+		<h1 id="title" class="headerT">Localiza SIM</h1>
+		<h2 class="headerT">Pagina do administrador</h2>
+    </header>
+    <aside>
+		<ul>
+			<li><a href="/admin/addRoute">Adicionar rota</a></li>
+			<li><a href="/admin/addSch">Adicionar horario</a></li>
+			<li><a href="/admin/addStop">Adicionar parada</a></li>
+			<li><a href="/admin/addBus">Adicionar onibus</a></li>
+			<li><a href="/admin/addTraj">Adicionar trajetoria</a></li>
+		</ul> 
+	</aside>
+    <content>
+        {% block content %} {% endblock %}
+    </content>
+</body>
+</html>

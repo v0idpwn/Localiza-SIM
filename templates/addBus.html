@@ -1,0 +1,12 @@
+{% extends "adminLayout.html" %}
+{% block content %}
+
+<h2>Adicionar onibus</h2>
+<form action="/admin/addBus" method="POST"> 
+	<table>
+		<tr><td>Nome do onibus:</td><td><input name="name" type="text"/></td></tr>
+	</table>
+	<br>
+	<input type="submit" value="Submit"/>
+</form>
+{% endblock %}

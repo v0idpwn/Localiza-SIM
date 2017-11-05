@@ -1,0 +1,9 @@
+{% extends "adminLayout.html" %}
+{% block content %}
+<h2>Adicionar rota</h2>
+
+<form action="/admin/addRoute" method="POST">
+	Nome da rota: <input name="name" type="text"/>
+	<br><input type="submit" value="Submit"/>
+</form>
+{% endblock %}

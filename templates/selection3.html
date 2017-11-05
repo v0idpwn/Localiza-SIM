@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for schedule in schedules %}
+<a href="/view/{{schedule[0]}}/{{schedule[2]}}" class="button">{{schedule[1]}}</a>
+{% endfor %}
+{% endblock %}
+

@@ -21,8 +21,7 @@ Software cuja intencao e possibilitar a localizacao de Onibus em tempo real. Des
 
 Basta clonar o repositorio, abri-lo e:
 
-```$ export FLASK_APP=localizasim.py
-```
+```$ export FLASK_APP=localizasim.py```
 
 
 ```$ flask run```
